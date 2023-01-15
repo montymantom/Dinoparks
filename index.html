@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add Rows To HTML Table From Array</title>
+    <meta charset="windows-1252" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <table id="table" border="1">
+      <!-- The Row Number 0 -->
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+      </tr>
+    </table>
+
+    <script>
+      var array = [
+          ["A1", "B1", "C1","D1"],
+          ["A2", "B2", "C2","D2"],
+          ["A3", "B3", "C3","D3"],
+          ["A4", "B4", "C4","D4"],
+          ["A5", "B5", "C5","D5"],
+          ["A1", "B1", "C1","D1"],
+          ["A2", "B2", "C2","D2"],
+          ["A3", "B3", "C3","D3"],
+          ["A4", "B4", "C4","D4"],
+          ["A5", "B5", "C5","D5"],
+        ],
+        table = document.getElementById("table");
+
+      for (var i = 0; i < array.length; i++) {
+        // create a new row
+        var newRow = table.insertRow(table.length);
+        for (var j = 0; j < array[i].length; j++) {
+          // create a new cell
+          var cell = newRow.insertCell(j);
+
+          // add value to the cell
+          cell.innerHTML = array[i][j];
+        }
+      }
+    </script>
+  </body>
+</html>

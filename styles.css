@@ -1,0 +1,19 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(26, 1fr);
+  grid-template-rows: repeat(16, 1fr);
+}
+
+.grid-item {
+  background-color: #ddd;
+  border: 1px solid #ccc;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.grey {
+    color: #696969;
+}

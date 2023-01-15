@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dinoparks</title>
+    <meta charset="windows-1252" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./objects.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        font-family: Verdana, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="header">
+      <img
+        src="./pictures/dinoparks-logo.png"
+        alt="image"
+        width="300px"
+        height="50px"
+      />
+    </h1>
+    <table id="table" border="1" class="center">
+      <tr>
+        <th colspan="26">
+          <div id="title" style="float: left">Park Zones</div>
+          <div id="date" style="float: right" class="grey"></div>
+        </th>
+      </tr>
+    </table>
+    <script>
+      const url = "https://dinoparks.herokuapp.com/nudls/feed";
+
+      let dinoArr = [];
+      let grid = generateGrid();
+      fetch(url)
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (data) {
+          for (let i = data.length - 1; i >= 0; i--) {
+            switch (data[i].kind) {
+              case "dino_added":
+                dinoArr = dinoAdd(dinoArr, data[i]);
+                break;
+              case "dino_removed":
+                grid = dinoRemoveGrid(grid, dinoArr, data[i]);
+                dinoArr = dinoRemove(dinoArr, data[i]);
+                break;
+              case "dino_location_updated":
+                grid = dinoInGrid(grid, dinoArr, data[i]);
+                dinoArr = updateLocation(dinoArr, data[i]);
+                break;
+              case "dino_fed":
+                dinoArr = dinoFed(dinoArr, data[i]);
+                break;
+              case "maintenance_performed":
+                grid = doMaintenance(grid, data[i]);
+                break;
+            }
+          }
+
+          table = document.getElementById("table");
+          var num = 0;
+          for (var i = 0; i < 16; i++) {
+            // create a new row
+            num++;
+            var newRow = table.insertRow(table.length);
+            const HTMLtext = '<tr class="grey">' + num.toString() + '</tr>';
+            newRow.innerHTML = HTMLtext;              
+            for (var j = 0; j < 26; j++) {
+              // create a new cell
+              var cell = newRow.insertCell(j);
+              cell.style.width = "16px";
+              cell.style.height = "12px";
+              // add value to the cell
+              let gridObj = grid[i * 26 + j];
+
+              //check whether grid needs maintenance
+              gridObj = checkMaintenance(gridObj);
+
+              //cell.innerHTML = gridObj.reqMaintenance;
+              //cell.style.backgroundColor = "#ddd";
+              if (gridObj.dino === false) {
+                cell.style.backgroundColor = "#51B687";
+              } else if (gridObj.dino === true) {
+                gridObj = checkSafe(gridObj, dinoArr);
+                if (gridObj.isSafe === false) {
+                  cell.style.backgroundColor = "red";
+                } else {
+                  cell.style.backgroundColor = "#51B687";
+                }
+              }
+              if (gridObj.reqMaintenance === true) {
+                cell.innerHTML =
+                  '<img src="./pictures/dino-parks-wrench.png" alt="image" width="12px" height="12px">';
+              }
+            }
+          }
+          var newRow = table.insertRow(table.length);
+          newRow.innerHTML = '<tr>__</tr>';
+          for (var j = 0; j < 26; j++) {
+              // create a new cell
+              var cell = newRow.insertCell(j);
+              cell.style.width = "16px";
+              cell.style.height = "12px";
+              cell.innerHTML = '<th class="grey">' + String.fromCharCode(65+j) + '</th>';
+          }
+        });
+    </script>
+    <script type="text/javascript" src="/gen_date.js"></script>
+  </body>
+</html>

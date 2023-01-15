@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add Rows To HTML Table From Array</title>
+    <meta charset="windows-1252" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <p id="variable">Hello</p>
+    <table id="table" border="1">
+    </table>
+
+    <script src="./dinoparks.js"></script>
+    <script>
+      var gridArray = [];
+      for (k = 0; k < 16; k++) {
+        gridArray.push(Array.from(Array(26).keys()));
+      }
+      table = document.getElementById("table");
+
+      for (var i = 0; i < 16; i++) {
+        // create a new row
+        var newRow = table.insertRow(table.length);
+        for (var j = 0; j < 26; j++) {
+          // create a new cell
+          var cell = newRow.insertCell(j);
+
+          // add value to the cell
+          cell.innerHTML = '<span style="color: red;">TEST</span>';
+          cell.style.backgroundColor = "red";
+          if (j === 10) {
+            cell.style.backgroundColor = "green";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
